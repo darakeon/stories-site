@@ -8,3 +8,5 @@ _ReSharper.*
 *.orig
 .hg*
 *.vs
+Site/Presentation/Presentation.Publish.xml
+Site/Presentation/Properties/PublishProfiles/*
