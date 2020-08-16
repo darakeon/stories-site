@@ -1,0 +1,11 @@
+syntax: glob
+bin
+obj
+*.user
+*.suo
+_ReSharper.*
+*.dotCover
+*.orig
+.hg*
+*.vs
+packages
