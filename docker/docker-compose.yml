@@ -2,6 +2,12 @@ version: "3.9"
 services:
   web:
     image: "darakeon/mebrak"
+    container_name: site
+  nginx:
+    image: "darakeon/nginx"
+    links:
+      - web
     ports:
       - "80:80"
       - "443:443"
+    #privileged: true

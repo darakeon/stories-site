@@ -1,4 +1,6 @@
 FROM darakeon/netcore
+MAINTAINER Dara Keon
+
 COPY Site /var/mebrak
 
 RUN dotnet publish /var/mebrak/Presentation/Presentation.csproj -o /var/www
