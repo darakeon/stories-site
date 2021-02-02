@@ -10,23 +10,20 @@ namespace Presentation.Startup
 		{
 			app.Use(async (context, next) =>
 			{
-				if (!context.Request.IsHttps)
+				var certPath = Path.Combine("..", "cert", "is_issued");
+
+				if (!context.Request.IsHttps && File.Exists(certPath))
 				{
-					var certPath = Path.Combine("..", "cert", "is_issued");
+					var url = context.Request
+						.GetDisplayUrl()
+						.Insert(4, "s");
 
-					if (File.Exists(certPath))
-					{
-						var url = context.Request
-							.GetDisplayUrl()
-							.Insert(4, "s");
-
-						context.Response.Redirect(url, false);
-
-						return;
-					}
+					context.Response.Redirect(url, false);
 				}
-
-				await next();
+				else
+				{
+					await next();
+				}
 			});
 		}
 	}
