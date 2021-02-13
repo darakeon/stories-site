@@ -7,3 +7,9 @@ services:
       - "80:80"
       - "443:443"
     #privileged: true
+    healthcheck:
+      test: ["CMD", "curl -f https://meak-stories.com"]
+      interval: 5m
+      timeout: 1m
+      retries: 2
+      start_period: 5m

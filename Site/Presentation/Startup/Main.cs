@@ -1,5 +1,4 @@
 using System.IO;
-using crypto;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -41,7 +40,8 @@ namespace Presentation.Startup
 				Tls.Https(app);
 			}
 
-			Static.Files(app);
+			Static.Configure(app);
+			Static.Certificate(app);
 
 			app.UseRouting();
 
