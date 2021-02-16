@@ -32,6 +32,8 @@ namespace Presentation.Startup
 		}
 
 		private static readonly String issuedPath = getPath("is_issued");
+
+		// this script is inside darakeon/nginx image
 		private static readonly String letsEncryptPath = getPath("cert-lets-encrypt.sh");
 
 		private static readonly Process process = new Process
@@ -52,17 +54,17 @@ namespace Presentation.Startup
 			if (context.Request.IsHttps)
 				return false;
 
-			var info = new FileInfo(issuedPath);
+			var issuedFile = new FileInfo(issuedPath);
 
-			Console.WriteLine($"File '{info.FullName}' exists: {info.Exists}");
+			Console.WriteLine($"File '{issuedFile.FullName}' exists: {issuedFile.Exists}");
 
-			if (info.Exists)
+			if (issuedFile.Exists)
 			{
 				var issuedContent = await File.ReadAllTextAsync(issuedPath);
 				var issued = Boolean.Parse(issuedContent);
 
 				var checkDays = issued ? 60 : 5;
-				var validUntil = info.CreationTime.AddDays(checkDays);
+				var validUntil = issuedFile.CreationTime.AddDays(checkDays);
 				var stillValid = validUntil > DateTime.Now;
 
 				Console.WriteLine($"Issued: {issued}");
@@ -104,9 +106,7 @@ namespace Presentation.Startup
 				? process.StandardOutput
 				: process.StandardError;
 
-			Console.WriteLine(
-				await result.ReadToEndAsync()
-			);
+			Console.WriteLine(await result.ReadToEndAsync());
 
 			if (isOk)
 			{
@@ -116,7 +116,7 @@ namespace Presentation.Startup
 			return isOk;
 		}
 
-		private static string getPath(String file)
+		private static String getPath(String file)
 		{
 			var relative = Path.Combine("..", "cert", file);
 			var info = new FileInfo(relative);
