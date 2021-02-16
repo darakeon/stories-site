@@ -7,10 +7,10 @@ docker rm mebrak > NUL 2> NUL
 
 cd ..
 
-copy mebrak\mebrak.dockerfile mebrak.dockerfile > NUL
+copy docker\mebrak.dockerfile mebrak.dockerfile > NUL
 docker build . -f mebrak.dockerfile -t darakeon/mebrak
 del mebrak.dockerfile > NUL
 
-cd mebrak
+cd docker
 
-docker compose up --project-name mebrak --detach
+docker push darakeon/mebrak

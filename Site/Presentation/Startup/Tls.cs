@@ -52,10 +52,27 @@ namespace Presentation.Startup
 			if (context.Request.IsHttps)
 				return false;
 
-			if (File.Exists(issuedPath))
+			var info = new FileInfo(issuedPath);
+
+			Console.WriteLine($"File '{info.FullName}' exists: {info.Exists}");
+
+			if (info.Exists)
 			{
 				var issuedContent = await File.ReadAllTextAsync(issuedPath);
-				return Boolean.Parse(issuedContent);
+				var issued = Boolean.Parse(issuedContent);
+
+				var checkDays = issued ? 60 : 5;
+				var validUntil = info.CreationTime.AddDays(checkDays);
+				var stillValid = validUntil > DateTime.Now;
+
+				Console.WriteLine($"Issued: {issued}");
+				Console.WriteLine($"Validity: {validUntil}");
+				Console.WriteLine($"Valid: {stillValid}");
+
+				if (stillValid)
+				{
+					return issued;
+				}
 			}
 
 			await File.WriteAllTextAsync(issuedPath, false.ToString());
@@ -76,8 +93,12 @@ namespace Presentation.Startup
 				return false;
 			}
 
+			Console.WriteLine(await File.ReadAllTextAsync("/etc/nginx/conf.d/default.conf"));
+
 			await process.WaitForExitAsync();
 			var isOk = process.ExitCode == 0;
+
+			Console.WriteLine(await File.ReadAllTextAsync("/etc/nginx/conf.d/default.conf"));
 
 			var result = isOk
 				? process.StandardOutput
