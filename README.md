@@ -1,3 +1,7 @@
+# OLD REPO
+
+The code of this repo was moved the https://github.com/darakeon/meak
+
 ## Stories Site
 
 This is the source code of the website at http://meak-stories.com
